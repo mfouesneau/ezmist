@@ -20,7 +20,7 @@ EXAMPLE USAGE
 
 * Basic example of downloading a sequence of isochrones, plotting, saving
 ```python 
->>> r = ezmist.get_t_isochrones(6.0, 7.0, 0.05, 0.0)
+>>> r = ezmist.get_t_isochrones(6.0, 7.0, 0.05, FeH_value=0.0, theory_output='full')
 >>> import pylab as plt
 >>> plt.scatter(r['logT'], r['logL'], c=r['logA'], edgecolor='None')
 >>> plt.show()
