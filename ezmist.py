@@ -226,6 +226,9 @@ def _read_mist_iso_filecontent(data):
         num_eeps = int(_d[-2])
         num_cols = int(_d[-1])
         hdr_list = data[counter + 2][1:]
+        if not py3k:
+            # correcting for recfunctions not up to date for unicode dtypes
+            hdr_list = [str(k) for k in hdr_list]
         formats = tuple([np.int32] + [np.float64 for i in range(num_cols - 1)])
         iso = np.zeros((num_eeps), {'names':tuple(hdr_list),'formats':tuple(formats)})
 
