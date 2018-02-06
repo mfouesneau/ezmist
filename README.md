@@ -14,6 +14,22 @@ This package has been tested on python 2.7 and python 3.
 
 (this package is similar to EzPadova:  https://github.com/mfouesneau/ezpadova)
 
+Installation
+------------
+Install with pip
+
+```
+pip install git+git://github.com/mfouesneau/ezmist
+```
+(`--user` if you want to install it in your user profile)
+
+Manual installation
+
+download the repository and run the setup
+
+```python setup.py install```
+
+
 
 EXAMPLE USAGE
 -------------
