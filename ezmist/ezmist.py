@@ -201,63 +201,68 @@ def _read_mist_iso_filecontent(data):
     import numpy as np
 
     try:
-        f = data.decode('utf8').split('\n')
-    except:
-        f = data.split('\n')
+        try:
+            f = data.decode('utf8').split('\n')
+        except:
+            f = data.split('\n')
 
-    content = [line.split() for line in f]
-    hdr = {'MIST': content[0][-1], 'MESA': content[1][-1]}
-    abun = {content[3][i]:float(content[4][i]) for i in range(1,5)}
-    hdr.update(**abun)
-    hdr['ROT'] = float(content[4][-1])
-    num_ages = int(content[6][-1])
-    hdr['num_ages'] = num_ages
+        content = [line.split() for line in f]
+        hdr = {'MIST': content[0][-1], 'MESA': content[1][-1]}
+        abun = {content[3][i]:float(content[4][i]) for i in range(1,5)}
+        hdr.update(**abun)
+        hdr['ROT'] = float(content[4][-1])
+        num_ages = int(content[6][-1])
+        hdr['num_ages'] = num_ages
 
-    #read one block for each isochrone
-    iso_set = []
-    counter = 0
-    data = content[8:]
+        #read one block for each isochrone
+        iso_set = []
+        counter = 0
+        data = content[8:]
 
-    # isochrone format
-    for i_age in range(num_ages):
+        # isochrone format
+        for i_age in range(num_ages):
 
-        #grab info for each isochrone
-        _d = data[counter]
-        num_eeps = int(_d[-2])
-        num_cols = int(_d[-1])
-        hdr_list = data[counter + 2][1:]
-        if not py3k:
-            # correcting for recfunctions not up to date for unicode dtypes
-            hdr_list = [str(k) for k in hdr_list]
-        formats = tuple([np.int32] + [np.float64 for i in range(num_cols - 1)])
-        iso = np.zeros((num_eeps), {'names':tuple(hdr_list),'formats':tuple(formats)})
+            #grab info for each isochrone
+            _d = data[counter]
+            num_eeps = int(_d[-2])
+            num_cols = int(_d[-1])
+            hdr_list = data[counter + 2][1:]
+            if not py3k:
+                # correcting for recfunctions not up to date for unicode dtypes
+                hdr_list = [str(k) for k in hdr_list]
+            formats = tuple([np.int32] + [np.float64 for i in range(num_cols - 1)])
+            iso = np.zeros((num_eeps), {'names':tuple(hdr_list),'formats':tuple(formats)})
 
-        #read through EEPs for each isochrone
-        for eep in range(num_eeps):
-            iso_chunk = data[3+counter+eep]
-            iso[eep] = tuple(iso_chunk)
+            #read through EEPs for each isochrone
+            for eep in range(num_eeps):
+                iso_chunk = data[3+counter+eep]
+                iso[eep] = tuple(iso_chunk)
 
-        iso_set.append(iso)
+            iso_set.append(iso)
 
-        counter += 3 + num_eeps + 2
+            counter += 3 + num_eeps + 2
 
-    _data = np.lib.recfunctions.stack_arrays(iso_set, usemask=False)
+        _data = np.lib.recfunctions.stack_arrays(iso_set, usemask=False)
 
-    t = Table(_data, header=hdr)
+        t = Table(_data, header=hdr)
 
-    # make some aliases
-    aliases = (('logL', 'log_L'),
-               ('logT', 'log_Teff'),
-               ('mass', 'star_mass'),
-               ('logg', 'log_g'))
+        # make some aliases
+        aliases = (('logL', 'log_L'),
+                   ('logT', 'log_Teff'),
+                   ('mass', 'star_mass'),
+                   ('logg', 'log_g'))
 
-    if 'log10_isochrone_age_yr' in t:
-        aliases += (('logA', 'log10_isochrone_age_yr'),)
-    else:
-        aliases += (('age', 'isochrone_age_yr'),)
+        if 'log10_isochrone_age_yr' in t:
+            aliases += (('logA', 'log10_isochrone_age_yr'),)
+        else:
+            aliases += (('age', 'isochrone_age_yr'),)
 
-    for a, b in aliases:
-        t.set_alias(a, b)
+        for a, b in aliases:
+            t.set_alias(a, b)
+    except ValueError:
+        buf = StringIO(data.decode('utf8'))
+        t = Table(buf, type='dat')
+        
     t.header['NAME'] = 'MIST/MESA isochrones'
 
     return t
