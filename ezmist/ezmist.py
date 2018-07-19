@@ -261,7 +261,7 @@ def _read_mist_iso_filecontent(data):
             t.set_alias(a, b)
     except ValueError:
         buf = StringIO(data.decode('utf8'))
-        t = Table(buf, type='dat')
+        t = Table(buf, dtype='dat')
         
     t.header['NAME'] = 'MIST/MESA isochrones'
 
