@@ -19,7 +19,7 @@ Installation
 Install with pip
 
 ```
-pip install git+git://github.com/mfouesneau/ezmist
+pip install git+https://github.com/mfouesneau/ezmist
 ```
 (`--user` if you want to install it in your user profile)
 
