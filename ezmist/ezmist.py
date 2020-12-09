@@ -308,7 +308,7 @@ def get_standard_isochrone(ret_table=True, **kwargs):
     else:
         return r
 
-def get_one_isochrone(age, FeH, age_scale='linear', ret_table=True, **kwargs):
+def get_one_isochrone(age, FeH,v_div_vcrit=0.0, age_scale='linear', ret_table=True, **kwargs):
     """ get one isochrone at a given time and [Fe/H]
 
     Parameters
@@ -338,10 +338,12 @@ def get_one_isochrone(age, FeH, age_scale='linear', ret_table=True, **kwargs):
         age_type='single',
         age_value=age,
         age_scale=age_scale,
+        FeH_value=FeH,
+        v_div_vcrit='vvcrit'+str(v_div_vcrit),
         **kwargs)
 
     d = _get_url_args(**opts)
-
+#    print(d)
     r = _query_website(d)
     if ret_table is True:
         return _read_mist_iso_filecontent(r)
