@@ -35,7 +35,7 @@ EXAMPLE USAGE
 -------------
 
 * Basic example of downloading a sequence of isochrones, plotting, saving
-```python 
+```python
 >>> r = ezmist.get_t_isochrones(6.0, 7.0, 0.05, FeH_value=0.0, theory_output='full')
 >>> import pylab as plt
 >>> plt.scatter(r['logT'], r['logL'], c=r['logA'], edgecolor='None')
@@ -43,9 +43,14 @@ EXAMPLE USAGE
 >>> r.write('myiso.fits')
 ```
 
-Note: MIST isochrone metallicities are defined in terms of [Fe/H] (not Z) 
+Note: MIST isochrone metallicities are defined in terms of [Fe/H] (not Z)
 
 * getting only one isochrone
-```python 
->>> r = ezmist.get_one_isochrones(1e7, 0.0, age_scale='linear')
-```
+```python
+>>> r = ezmist.get_one_isochrones(age=1e7, FeH=0.0,v_div_vcrit=0.0, age_scale='linear')
+
+* getting synthetic isochrones as pandas dataframe
+
+```python
+
+>>> data=ezmist.get_one_isochrone(age=0.6e9,FeH=0.19,v_div_vcrit=0.0,age_scale='linear',output_option='photometry',output='UBVRIplus').to_pandas()

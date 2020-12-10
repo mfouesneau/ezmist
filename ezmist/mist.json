@@ -18,7 +18,7 @@
 	"output_option": ["theory", "photometry"],
 	"theory_output": ["basic", "full"],
 	"output": [
-			["UBVRIJHKsKp", "UBVRI + 2MASS JHKs + Kepler"],
+			["UBVRIplus", "UBV(RI)c + 2MASS + Kepler + Hipparcos + Gaia (DR2/MAW/EDR3) + Tess"],
 			["WashDDOuvby", "Washington + Strömgren + DDO51"],
 			["HST_WFC3", "HST WFC3/UVIS+IR"],
 			["HST_ACS_HR", "HST ACS/HRC"],
